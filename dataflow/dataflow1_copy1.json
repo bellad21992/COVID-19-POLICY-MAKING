@@ -1,0 +1,131 @@
+{
+	"name": "dataflow1_copy1",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "Parquet2",
+						"type": "DatasetReference"
+					},
+					"name": "dateazureSQL",
+					"description": "get source date from azuresql"
+				},
+				{
+					"dataset": {
+						"referenceName": "Parquet3",
+						"type": "DatasetReference"
+					},
+					"name": "dataSQLserver",
+					"description": "get source date from SQL server"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "sinkdata",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "union1"
+				},
+				{
+					"name": "select1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          DateKey as integer,",
+				"          FullDate as date,",
+				"          isWeekDay as boolean,",
+				"          DayOfWeek as integer,",
+				"          DayOfMonth as integer,",
+				"          DayOfQuarter as integer,",
+				"          DayOfYear as integer,",
+				"          DayName as string,",
+				"          WeekOfYear as integer,",
+				"          WeekName as string,",
+				"          MonthOfYear as integer,",
+				"          MonthName as string,",
+				"          CalendarQuarter as integer,",
+				"          CalendarQuarterName as string,",
+				"          CalendarYear as integer,",
+				"          FiscalMonth as integer,",
+				"          FiscalMonthName as string,",
+				"          FiscalQuarter as integer,",
+				"          FiscalQuarterName as string,",
+				"          FiscalYear as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     format: 'parquet') ~> dateazureSQL",
+				"source(output(",
+				"          DateKey as integer,",
+				"          FullDate as date,",
+				"          isWeekDay as boolean,",
+				"          DayOfWeek as integer,",
+				"          DayOfMonth as integer,",
+				"          DayOfQuarter as integer,",
+				"          DayOfYear as integer,",
+				"          DayName as string,",
+				"          WeekOfYear as integer,",
+				"          WeekName as string,",
+				"          MonthOfYear as integer,",
+				"          MonthName as string,",
+				"          CalendarQuarter as integer,",
+				"          CalendarQuarterName as string,",
+				"          CalendarYear as integer,",
+				"          FiscalMonth as integer,",
+				"          FiscalMonthName as string,",
+				"          FiscalQuarter as integer,",
+				"          FiscalQuarterName as string,",
+				"          FiscalYear as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     format: 'parquet') ~> dataSQLserver",
+				"dateazureSQL, dataSQLserver union(byName: true)~> union1",
+				"union1 select(mapColumn(",
+				"          DateKey,",
+				"          FullDate,",
+				"          isWeekDay,",
+				"          DayOfWeek,",
+				"          DayOfMonth,",
+				"          DayOfQuarter,",
+				"          DayOfYear,",
+				"          DayName,",
+				"          WeekOfYear,",
+				"          WeekName,",
+				"          MonthOfYear,",
+				"          MonthName,",
+				"          CalendarQuarter,",
+				"          CalendarQuarterName,",
+				"          CalendarYear,",
+				"          FiscalMonth,",
+				"          FiscalMonthName,",
+				"          FiscalQuarter,",
+				"          FiscalQuarterName,",
+				"          FiscalYear",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1",
+				"select1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'parquet',",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     saveOrder: 1) ~> sink1"
+			]
+		}
+	}
+}
