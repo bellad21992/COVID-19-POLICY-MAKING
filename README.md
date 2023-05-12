@@ -1,4 +1,4 @@
-# DS310-TEAM-1-COVID-19-TRENDS-&-POLICY-MAKING
+# DS310 TEAM 1 COVID 19 TRENDS & POLICY MAKING
 
 Synaspe Environment: https://adf.azure.com/en/home?factory=%2Fsubscriptions%2F3b608a14-90b7-42d9-82e2-77c947974137%2FresourceGroups%2FTeam01%2Fproviders%2FMicrosoft.DataFactory%2Ffactories%2FTeam01DataFactory
 
